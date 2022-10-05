@@ -13,7 +13,7 @@ pub type Cw721MetadataContract<'a> = cw721_base::Cw721Contract<'a, Extension, Em
 
 pub mod entry {
     use crate::error::ContractError;
-    use crate::execute::{execute_instantiate, mint};
+    use crate::execute::{execute_instantiate, mint, update_metadata};
     use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
     use crate::query::address_of;
 
@@ -48,6 +48,7 @@ pub mod entry {
 
         match msg {
             ExecuteMsg::Mint(msg) => mint(contract, deps, env, info, msg),
+            ExecuteMsg::UpdateMetadata(msg) => update_metadata(contract, deps, env, info, msg),
             _ => contract
                 .execute(deps, env, info, msg.into())
                 .map_err(ContractError::Base),

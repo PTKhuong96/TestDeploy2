@@ -59,6 +59,12 @@ pub struct ContractInfo {
 }
 pub type MintMsg = CW721MintMsg<Extension>;
 
+#[derive(Serialize, Deserialize, Clone, PartialEq, JsonSchema, Debug, Default)]
+pub struct UpdateMetadataMsg {
+    pub token_id: String,
+    pub metadata: Option<Metadata>,
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
@@ -249,6 +255,8 @@ pub enum ExecuteMsg {
     Burn {
         token_id: String,
     },
+
+    UpdateMetadata(UpdateMetadataMsg),
 }
 
 impl From<ExecuteMsg> for CW721ExecuteMsg<Extension> {

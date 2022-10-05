@@ -1,5 +1,5 @@
 use crate::error::ContractError;
-use crate::msg::{ContractInfo, InstantiateMsg, MintMsg};
+use crate::msg::{ContractInfo, InstantiateMsg, MintMsg, UpdateMetadataMsg};
 use crate::state::{CONTRACT_INFO, MINTING_FEES_INFO};
 use crate::utils::username_is_valid;
 use crate::Cw721MetadataContract;
@@ -86,4 +86,42 @@ pub fn mint(
         .add_attribute("action", "mint")
         .add_attribute("minter", address_trying_to_mint)
         .add_attribute("token_id", msg.token_id))
+}
+
+pub fn update_metadata(
+    contract: Cw721MetadataContract,
+    deps: DepsMut,
+    _env: Env,
+    info: MessageInfo,
+    msg: UpdateMetadataMsg,
+) -> Result<Response, ContractError> {
+    let address_trying_to_update = info.sender.clone();
+    let token_id = msg.token_id.clone();
+    let username_nft = contract.tokens.load(deps.storage, &token_id)?;
+
+    let username_owner = username_nft.owner.clone();
+
+    // check it's the owner of the NFT updating meta
+    ensure_eq!(
+        username_owner,
+        address_trying_to_update,
+        ContractError::Unauthorized {}
+    );
+
+    contract
+        .tokens
+        .update(deps.storage, &token_id, |token| -> StdResult<_> {
+            match token {
+                Some(mut nft) => {
+                    nft.extension = msg.metadata;
+                    Ok(nft)
+                }
+                None => Ok(username_nft),
+            }
+        })?;
+
+    Ok(Response::new()
+        .add_attribute("action", "update_metadata")
+        .add_attribute("owner", info.sender)
+        .add_attribute("token_id", token_id))
 }
