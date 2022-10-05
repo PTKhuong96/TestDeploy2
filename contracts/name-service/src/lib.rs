@@ -47,7 +47,7 @@ pub mod entry {
         let contract = Cw721MetadataContract::default();
 
         match msg {
-            ExecuteMsg::Mint(msg) => mint(contract, deps, env, info, msg)
+            ExecuteMsg::Mint(msg) => mint(contract, deps, env, info, msg),
             _ => contract
                 .execute(deps, env, info, msg.into())
                 .map_err(ContractError::Base),
