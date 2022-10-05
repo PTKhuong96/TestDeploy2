@@ -5,11 +5,6 @@ members = ["contracts/*"]
 codegen-units = 1
 incremental = false
 
-[profile.release.package.nft-station-minter]
-codegen-units = 1
-incremental = false
-
-
 [profile.release]
 rpath = false
 lto = true
