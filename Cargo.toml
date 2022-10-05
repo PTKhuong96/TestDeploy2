@@ -8,7 +8,7 @@ incremental = false
 [profile.release]
 rpath = false
 lto = true
+opt-level = 'z'
 overflow-checks = true
-opt-level = 3
 debug = false
 debug-assertions = false
