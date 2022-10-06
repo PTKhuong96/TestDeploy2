@@ -1,7 +1,6 @@
 use crate::error::ContractError;
 use crate::msg::{ContractInfo, InstantiateMsg, MintMsg, UpdateMetadataMsg};
 use crate::state::{CONTRACT_INFO, MINTING_FEES_INFO};
-use crate::utils::username_is_valid;
 use crate::Cw721MetadataContract;
 
 use cw2::set_contract_version;
@@ -58,10 +57,6 @@ pub fn mint(
     // username == token_id
     // normalize it to lowercase
     let username = &msg.token_id.to_lowercase();
-
-    if !username_is_valid(deps.as_ref(), username) {
-        return Err(ContractError::TokenNameInvalid {});
-    }
 
     // create the token
     // this will fail if token_id (i.e. username)

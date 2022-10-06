@@ -25,9 +25,6 @@ pub enum ContractError {
     #[error("Token Cap Exceeded")]
     TokenCapExceeded {},
 
-    #[error("Token Name Invalid")]
-    TokenNameInvalid {},
-
     #[error("Required Parent Not Found")]
     ParentNotFound {},
 
